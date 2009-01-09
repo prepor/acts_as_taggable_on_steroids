@@ -136,7 +136,7 @@ module ActiveRecord #:nodoc:
           group_by  = "#{Tag.table_name}.id, #{Tag.table_name}.name HAVING COUNT(*) > 0"
           group_by << " AND #{having}" unless having.blank?
           
-          { :select     => "#{Tag.table_name}.id, #{Tag.table_name}.name, COUNT(*) AS count", 
+          { :select     => "#{Tag.table_name}.id, #{Tag.table_name}.slug_name,#{Tag.table_name}.name, COUNT(*) AS count", 
             :joins      => joins.join(" "),
             :conditions => conditions,
             :group      => group_by
@@ -149,7 +149,7 @@ module ActiveRecord #:nodoc:
         
        private
         def tags_condition(tags, table_name = Tag.table_name)
-          condition = tags.map { |t| sanitize_sql(["#{table_name}.name LIKE ?", t]) }.join(" OR ")
+          condition = tags.map { |t| sanitize_sql(["#{table_name}.slug_name LIKE ?", t]) }.join(" OR ")
           "(" + condition + ")"
         end
       end
@@ -178,8 +178,8 @@ module ActiveRecord #:nodoc:
         def save_tags
           return unless @tag_list
           
-          new_tag_names = @tag_list - tags.map(&:name)
-          old_tags = tags.reject { |tag| @tag_list.include?(tag.name) }
+          new_tag_names = @tag_list - tags.map(&:slug_name)
+          old_tags = tags.reject { |tag| @tag_list.include?(tag.slug_name) }
           
           self.class.transaction do
             if old_tags.any?
@@ -188,7 +188,8 @@ module ActiveRecord #:nodoc:
             end
             
             new_tag_names.each do |new_tag_name|
-              tags << Tag.find_or_create_with_like_by_name(new_tag_name)
+              #tags << Tag.find_or_create_with_like_by_name(new_tag_name)
+              tags << Tag.find_or_create_with_like_by_slug_name(new_tag_name)
             end
           end
           
