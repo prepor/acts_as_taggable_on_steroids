@@ -12,7 +12,7 @@ class Tag < ActiveRecord::Base
     find(:first, :conditions => ["name LIKE ?", name]) || create( :name => name, :slug_name => Slug.strip_diacritics( name ) )
   end
   def self.find_or_create_with_like_by_slug_name(name)
-    find(:first, :conditions => ["slug_name LIKE ?", name]) || create( :name => name, :slug_name => Slug.strip_diacritics( name ) )
+    find(:first, :conditions => ["slug_name LIKE ?", Slug.strip_diacritics( name )]) || create( :name => name, :slug_name => Slug.strip_diacritics( name ) )
   end
   
   def ==(object)
