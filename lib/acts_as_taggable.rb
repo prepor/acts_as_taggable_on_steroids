@@ -178,8 +178,8 @@ module ActiveRecord #:nodoc:
         def save_tags
           return unless @tag_list
           
-          new_tag_names = @tag_list - tags.map(&:slug_name)
-          old_tags = tags.reject { |tag| @tag_list.include?(tag.slug_name) }
+          new_tag_names = @tag_list - tags.map(&:name)
+          old_tags = tags.reject { |tag| @tag_list.include?(tag.name) }
           
           self.class.transaction do
             if old_tags.any?
