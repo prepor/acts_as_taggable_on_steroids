@@ -22,6 +22,9 @@ class Tag < ActiveRecord::Base
   def to_s
     name
   end
+  def to_param
+    self.slug_name
+  end
   
   def count
     read_attribute(:count).to_i
