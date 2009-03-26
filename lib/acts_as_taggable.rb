@@ -188,8 +188,7 @@ module ActiveRecord #:nodoc:
             end
             
             new_tag_names.each do |new_tag_name|
-              #tags << Tag.find_or_create_with_like_by_name(new_tag_name)
-              tags << Tag.find_or_create_with_like_by_slug_name(new_tag_name)
+              tags << Tag.find_or_create_with_like_by_name(new_tag_name)
             end
           end
           
