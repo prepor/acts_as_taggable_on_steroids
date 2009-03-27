@@ -20,7 +20,7 @@ class Tag < ActiveRecord::Base
   end
   
   def to_s
-    self.slug_name
+    name
   end
   def to_param
     self.slug_name
